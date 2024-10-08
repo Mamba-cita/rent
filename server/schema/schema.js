@@ -5,6 +5,24 @@ const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema, GraphQLList 
 
 //house type
 
+const HouseType = new GraphQLObjectType({
+    name: 'House',
+        fields: () => ({
+            id: { type: GraphQLID },
+            name: { type: GraphQLString },
+            description: { type: GraphQLString },
+            status: { type: GraphQLString },
+            tenant: { 
+             type: TenantType,
+             resolve(parent, args) {
+                return clients.find(client => client.id === parent.clientId);
+             }
+            }
+        })
+    })
+
+//tenant type
+
 const TenantType = new GraphQLObjectType({
 name: 'Tenant',
     fields: () => ({
@@ -18,6 +36,19 @@ name: 'Tenant',
 const RootQuery = new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
+        houses: {
+            type: new GraphQLList(HouseType),
+            resolve() {
+                return projects;
+            }
+        },
+        house: {
+            type: HouseType,
+            args: { id: { type: GraphQLID } },
+            resolve(parent, args) {
+                return projects.find(project => project.id === args.id);
+            }
+        },
         tenants:{
             type: new GraphQLList(TenantType),
             resolve() {
