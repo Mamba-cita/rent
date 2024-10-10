@@ -133,7 +133,6 @@ const Mutation = new GraphQLObjectType({
           throw new Error('User already exists');
         }
 
-        // Password hashing is done in the User model's pre-save hook
         const newUser = new User(args);
         return newUser.save();
       },
@@ -263,7 +262,7 @@ const Mutation = new GraphQLObjectType({
 
         const currentDate = new Date();
         house.status = HOUSE_STATUSES.ON_NOTICE;
-        house.noticeDate = currentDate.toISOString(); // Store date as ISO string
+        house.noticeDate = currentDate.toISOString();
         await house.save();
 
         return house;
