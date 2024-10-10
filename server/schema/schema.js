@@ -1,6 +1,44 @@
-const { GraphQLObjectType, GraphQLID, GraphQLString, GraphQLSchema, GraphQLList, GraphQLNonNull } = require('graphql');
+const {
+  GraphQLObjectType,
+  GraphQLID,
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLList,
+  GraphQLNonNull,
+} = require('graphql');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const House = require('../models/House');
 const Tenant = require('../models/Tenants');
+const User = require('../models/User');
+
+const JWT_SECRET = process.env.JWT_SECRET;
+
+// Constants for roles and statuses
+const ROLES = {
+  ADMIN: 'Admin',
+  TENANT: 'Tenant',
+};
+
+const HOUSE_STATUSES = {
+  VACANT: 'Vacant',
+  RENTED: 'Rented',
+  ON_NOTICE: 'On Notice',
+};
+
+// UserType
+const UserType = new GraphQLObjectType({
+  name: 'User',
+  fields: () => ({
+    id: { type: GraphQLID },
+    name: { type: GraphQLString },
+    email: { type: GraphQLString },
+    tel: { type: GraphQLString },
+    id_no: { type: GraphQLString },
+    role: { type: GraphQLString },
+    token: { type: GraphQLString },
+  }),
+});
 
 // HouseType
 const HouseType = new GraphQLObjectType({
@@ -11,10 +49,11 @@ const HouseType = new GraphQLObjectType({
     house_no: { type: GraphQLString },
     floor_no: { type: GraphQLString },
     rent: { type: GraphQLString },
-    status: { type: GraphQLString }, // Vacant, Rented, On Notice
+    status: { type: GraphQLString },
+    noticeDate: { type: GraphQLString },
     tenant: {
       type: TenantType,
-      resolve(parent, args) {
+      resolve(parent) {
         return Tenant.findById(parent.tenantId);
       },
     },
@@ -32,11 +71,11 @@ const TenantType = new GraphQLObjectType({
     id_no: { type: GraphQLString },
     house: {
       type: HouseType,
-      resolve(parent, args) {
+      resolve(parent) {
         return House.findById(parent.houseId);
       },
     },
-    status: { type: GraphQLString }, // Active by default
+    status: { type: GraphQLString },
   }),
 });
 
@@ -77,29 +116,83 @@ const RootQuery = new GraphQLObjectType({
 const Mutation = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    // Add House Mutation
+    // Register User
+    registerUser: {
+      type: UserType,
+      args: {
+        name: { type: GraphQLNonNull(GraphQLString) },
+        email: { type: GraphQLNonNull(GraphQLString) },
+        tel: { type: GraphQLNonNull(GraphQLString) },
+        id_no: { type: GraphQLNonNull(GraphQLString) },
+        role: { type: GraphQLNonNull(GraphQLString) },
+        password: { type: GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(parent, args) {
+        const existingUser = await User.findOne({ email: args.email });
+        if (existingUser) {
+          throw new Error('User already exists');
+        }
+
+        // Password hashing is done in the User model's pre-save hook
+        const newUser = new User(args);
+        return newUser.save();
+      },
+    },
+
+    // Login User
+    loginUser: {
+      type: UserType,
+      args: {
+        email: { type: GraphQLNonNull(GraphQLString) },
+        password: { type: GraphQLNonNull(GraphQLString) },
+      },
+      async resolve(parent, { email, password }) {
+        const user = await User.findOne({ email });
+        if (!user) {
+          throw new Error('Invalid credentials');
+        }
+
+        // Use the comparePassword method from User model
+        const isMatch = await user.comparePassword(password);
+        if (!isMatch) {
+          throw new Error('Invalid credentials');
+        }
+
+        const token = jwt.sign(
+          { userId: user.id, role: user.role },
+          JWT_SECRET,
+          { expiresIn: '1h' }
+        );
+
+        return { ...user._doc, token };
+      },
+    },
+
+    // Add House
     addHouse: {
       type: HouseType,
       args: {
-        size: { type: GraphQLString },
-        house_no: { type: GraphQLString },
-        floor_no: { type: GraphQLString },
-        rent: { type: GraphQLString },
-        status: { type: GraphQLString }, // Optional
+        size: { type: GraphQLNonNull(GraphQLString) },
+        house_no: { type: GraphQLNonNull(GraphQLString) },
+        floor_no: { type: GraphQLNonNull(GraphQLString) },
+        rent: { type: GraphQLNonNull(GraphQLString) },
+        status: { type: GraphQLString },
       },
-      resolve(parent, args) {
-        let house = new House({
-          size: args.size,
-          house_no: args.house_no,
-          floor_no: args.floor_no,
-          rent: args.rent,
-          status: args.status || 'Vacant', // Default to 'Vacant' if not provided
+      async resolve(parent, args, { req }) {
+        if (req.user.role !== ROLES.ADMIN) {
+          throw new Error('Unauthorized');
+        }
+
+        const house = new House({
+          ...args,
+          status: args.status || HOUSE_STATUSES.VACANT, // Default to Vacant
         });
+
         return house.save();
       },
     },
-    
-    // Add Tenant Mutation
+
+    // Add Tenant
     addTenant: {
       type: TenantType,
       args: {
@@ -107,75 +200,101 @@ const Mutation = new GraphQLObjectType({
         email: { type: GraphQLNonNull(GraphQLString) },
         tel: { type: GraphQLNonNull(GraphQLString) },
         id_no: { type: GraphQLNonNull(GraphQLString) },
-        houseId: { type: GraphQLID }, // Relates tenant to a house
+        houseId: { type: GraphQLNonNull(GraphQLID) },
       },
-      async resolve(parent, args) {
-        // Check if the house exists and is vacant
-        let house = await House.findById(args.houseId);
-        if (!house || house.status !== 'Vacant') {
+      async resolve(parent, args, { req }) {
+        if (req.user.role !== ROLES.ADMIN) {
+          throw new Error('Unauthorized');
+        }
+
+        const house = await House.findById(args.houseId);
+        if (!house || house.status !== HOUSE_STATUSES.VACANT) {
           throw new Error('House is either not available or not vacant');
         }
 
-        let tenant = new Tenant({
-          name: args.name,
-          email: args.email,
-          tel: args.tel,
-          id_no: args.id_no,
+        const tenant = new Tenant({
+          ...args,
+          status: 'Active',
           houseId: args.houseId,
-          status: 'Active', // Active tenant by default
         });
 
-        // Save the tenant
-        let savedTenant = await tenant.save();
+        await tenant.save();
 
-        // Update the house status to 'Rented'
-        house.status = 'Rented';
-        house.tenantId = savedTenant.id;
+        // Update house status and associate tenant
+        house.status = HOUSE_STATUSES.RENTED;
+        house.tenantId = tenant.id;
         await house.save();
 
-        return savedTenant;
+        return tenant;
       },
     },
-    
+
     // Update House Status
     updateHouseStatus: {
       type: HouseType,
       args: {
-        id: { type: GraphQLID },
-        status: { type: GraphQLString },
+        id: { type: GraphQLNonNull(GraphQLID) },
+        status: { type: GraphQLNonNull(GraphQLString) },
       },
-      resolve(parent, args) {
+      async resolve(parent, args) {
         return House.findByIdAndUpdate(
           args.id,
           { status: args.status },
-          { new: true } // Return updated document
+          { new: true }
         );
       },
     },
-    
-    // Remove Tenant (when tenant leaves the house)
+
+    // Tenant Gives Notice to Vacate
+    giveNotice: {
+      type: HouseType,
+      args: {
+        houseId: { type: GraphQLNonNull(GraphQLID) },
+      },
+      async resolve(parent, args, { req }) {
+        if (req.user.role !== ROLES.TENANT) {
+          throw new Error('Unauthorized');
+        }
+
+        const house = await House.findById(args.houseId);
+        if (!house || house.status !== HOUSE_STATUSES.RENTED) {
+          throw new Error('House not rented or does not exist');
+        }
+
+        const currentDate = new Date();
+        house.status = HOUSE_STATUSES.ON_NOTICE;
+        house.noticeDate = currentDate.toISOString(); // Store date as ISO string
+        await house.save();
+
+        return house;
+      },
+    },
+
+    // Remove Tenant
     removeTenant: {
       type: TenantType,
       args: {
-        id: { type: GraphQLID },
+        id: { type: GraphQLNonNull(GraphQLID) },
       },
-      async resolve(parent, args) {
-        // Find the tenant
-        let tenant = await Tenant.findById(args.id);
+      async resolve(parent, args, { req }) {
+        if (req.user.role !== ROLES.ADMIN) {
+          throw new Error('Unauthorized');
+        }
+
+        const tenant = await Tenant.findById(args.id);
         if (!tenant) {
           throw new Error('Tenant not found');
         }
 
-        // Get the associated house and set status back to 'Vacant'
-        let house = await House.findById(tenant.houseId);
+        const house = await House.findById(tenant.houseId);
         if (house) {
-          house.status = 'Vacant';
+          house.status = HOUSE_STATUSES.VACANT;
           house.tenantId = null;
           await house.save();
         }
 
-        // Remove tenant
-        return Tenant.findByIdAndRemove(args.id);
+        await Tenant.findByIdAndDelete(args.id);
+        return tenant;
       },
     },
   },
