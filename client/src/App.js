@@ -1,28 +1,37 @@
-import Header from "./components/Header";
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import Tenants from "./components/Tenants";
-
-
-
-
-
-const client = new ApolloClient({
-  uri: 'http://localhost:8080/graphql',
-  cache: new InMemoryCache(),
-});
-
-
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './components/Header';
+import Home from './pages/homePage';
+import Register from './pages/register';
+import Login from './pages/login';
+import Admin from './pages/adminPage'; 
+import Tenant from './pages/tenantPage';
+import User from './pages/userPage';
+import RoleProtectedRoute from './components/RoleProtectedRoute';
 
 function App() {
   return (
     <>
-    <ApolloProvider client={client}>
-    <Header />
-    <div className="Container">
-      <Tenants />     
-    </div>
-    </ApolloProvider>
-  
+      <Header />
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+
+        {/* Role-based Protected Routes */}
+        <Route
+          path="/"
+          element={
+            <RoleProtectedRoute
+              element={Home}
+              tenantPage="/tenant"
+              userPage="/user"
+            />
+          }
+        />
+        {/* Admin, Tenant, and User Pages */}
+        <Route path="/tenant" element={<Tenant />} />
+        <Route path="/user" element={<User />} />
+      </Routes>
     </>
   );
 }
