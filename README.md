@@ -1,4 +1,4 @@
-# GraphQL Property Management API
+# Property Management
 
 ## Overview
 
