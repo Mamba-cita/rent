@@ -14,6 +14,8 @@ input MessageInput {
 
 
 
+
+
 # users registration
 
 type User {
@@ -38,6 +40,22 @@ input LoginInput {
     email: String
     password: String
 }
+
+
+#rooms
+
+type Room {
+    room_no: String
+    size: Int
+    status: String
+}
+
+input RoomInput {
+    room_no: String
+    size: String
+    status: String
+}
+
 
 
 
