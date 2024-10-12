@@ -1,27 +1,20 @@
-import Header from "./components/Header";
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client';
-import Tenants from "./components/Tenants";
 
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Header from './components/Header';
+import Home from './pages/homePage';
 
-
-
-
-const client = new ApolloClient({
-  uri: 'http://localhost:8080/graphql',
-  cache: new InMemoryCache(),
-});
 
 
 
 function App() {
   return (
     <>
-    <ApolloProvider client={client}>
-    <Header />
-    <div className="Container">
-      <Tenants />     
-    </div>
-    </ApolloProvider>
+  <Header />
+<Routes>
+<Route path="/" element={<Home />} />
+{/* <Route path="/register" element={<Register />} />
+<Route path="/login" element={<Login />} /> */}
+</Routes>
   
     </>
   );
