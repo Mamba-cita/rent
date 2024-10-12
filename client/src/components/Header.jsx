@@ -1,9 +1,24 @@
+import { useContext } from 'react';
 import logo from './assets/r-logo.jpg';
-
+import { AuthContext } from "../context/authContext";
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Header() {
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    localStorage.removeItem('token');
+    navigate('/login');
+    
+  };
+
+  console.log(user);
+
+
+
   return (
     <Box sx={{flexGrow: 1}}>
       <AppBar position="static">
@@ -15,10 +30,14 @@ export default function Header() {
           <Typography variant="h5" component="div" > 
           </Typography>
           <Box alignItems='right' sx={{flexGrow: 1, textAlign: 'right'}}>
-            <Button color="inherit">
-              <Link to="/register" style={{ textDecoration: 'none', color: 'white', marginRight: '10px' }}>Register</Link>
-              <Link to="/login" style={{ textDecoration: 'none', color: 'white' }}>Login</Link>
-            </Button>
+            {user ? (
+              <Button color="inherit" onClick={handleLogout}>Logout</Button>
+            ) : (
+              <Button color="inherit">
+                <Link to="/register" style={{ textDecoration: 'none', color: 'white', marginRight: '10px' }}>Register</Link>
+                <Link to="/login" style={{ textDecoration: 'none', color: 'white' }}>Login</Link>
+              </Button>
+            )}
 
           </Box>
         </Toolbar>
