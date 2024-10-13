@@ -12,20 +12,18 @@ input MessageInput {
     username: String
 }
 
-
-
-
-
-# users registration
+# Users registration
 
 type User {
+    id: ID!
     username: String
     email: String
     tel: String
     id_no: String
     role: String
-    password: String
     token: String
+    createdAt: String  
+    updatedAt: String 
 }
 
 input RegisterInput {
@@ -34,6 +32,7 @@ input RegisterInput {
     tel: String
     id_no: String
     password: String
+    confirmPassword: String
 }
 
 input LoginInput {
@@ -41,8 +40,7 @@ input LoginInput {
     password: String
 }
 
-
-#rooms
+# Rooms
 
 type Room {
     room_no: String
@@ -56,31 +54,19 @@ input RoomInput {
     status: String
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 type Query {
     message(id: ID!): Message
     user(id: ID!): User
+    users: [User]
 }
 
 type Mutation {
     createMessage(messageInput: MessageInput): Message!
 
-    # users registration
+    # Users registration
     registerUser(registerInput: RegisterInput): User!
 
-    # users login
-
+    # Users login
     loginUser(loginInput: LoginInput): User!
 }
 `;
