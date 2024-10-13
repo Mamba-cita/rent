@@ -6,7 +6,6 @@ import TenantSidebar from "./components/common/TenantSidebar"; // Import the ten
 import OverviewPage from "./pages/OverviewPage";
 import ProductsPage from "./pages/ProductsPage";
 import UsersPage from "./pages/UsersPage";
-import SalesPage from "./pages/SalesPage";
 import OrdersPage from "./pages/OrdersPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import SettingsPage from "./pages/SettingsPage";
@@ -16,6 +15,7 @@ import RoleProtectedRoute from "./components/common/RoleProtectedRoute.jsx";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import { AuthContext } from "./context/authContext"; // Import AuthContext to check user role
+import HousePage from "./pages/HousePage.jsx";
 
 function App() {
   const location = useLocation();
@@ -61,7 +61,7 @@ function App() {
         />
         <Route path="/products" element={<ProductsPage />} />
         <Route path="/users" element={<UsersPage />} />
-        <Route path="/sales" element={<SalesPage />} />
+        <Route path="/houses" element={<HousePage />} />
         <Route path="/orders" element={<OrdersPage />} />
         <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/settings" element={<SettingsPage />} />

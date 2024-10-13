@@ -35,14 +35,6 @@ mutation LoginUser (
 
 
 
-//verifyToken
-
-
-
-//logout
-
-
-
 
 
 
