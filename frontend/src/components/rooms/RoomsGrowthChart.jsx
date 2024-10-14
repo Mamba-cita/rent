@@ -1,10 +1,10 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { motion } from "framer-motion";
 import { useQuery } from '@apollo/client';
-import { GET_HOUSES } from "../../queries/houseQueries";
+import { GET_ROOMS } from "../../queries/roomQueries";
 
-const HouseGrowthChart = () => {
-	const { loading, error, data } = useQuery(GET_HOUSES); 
+const RoomsGrowthChart = () => {
+	const { loading, error, data } = useQuery(GET_ROOMS); // Fetch rooms data
 
 	// Handle loading state
 	if (loading) return <p>Loading...</p>;
@@ -12,25 +12,25 @@ const HouseGrowthChart = () => {
 	// Handle error state
 	if (error) return <p>Error: {error.message}</p>;
 
-	// Extract house data from the query result
-	const houses = data.houses || [];
+	// Extract room data from the query result
+	const rooms = data.rooms || [];
 
-	// Calculate house growth data
-	const houseGrowthData = [];
+	// Calculate room growth data
+	const roomGrowthData = [];
 	const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-	const housesPerMonth = Array(12).fill(0); // Create an array to hold house counts for each month
+	const roomsPerMonth = Array(12).fill(0); // Create an array to hold room counts for each month
 
-	houses.forEach(house => {
-		const createdAt = new Date(house.createdAt); // Assuming `createdAt` field exists
+	rooms.forEach(room => {
+		const createdAt = new Date(room.createdAt); // Assuming `createdAt` field exists for rooms
 		if (createdAt) {
 			const monthIndex = createdAt.getMonth(); // Get month index (0-11)
-			housesPerMonth[monthIndex] += 1; // Increment house count for the respective month
+			roomsPerMonth[monthIndex] += 1; // Increment room count for the respective month
 		}
 	});
 
-	// Build house growth data for chart
+	// Build room growth data for chart
 	monthNames.forEach((month, index) => {
-		houseGrowthData.push({ month, houses: housesPerMonth[index] });
+		roomGrowthData.push({ month, rooms: roomsPerMonth[index] });
 	});
 
 	return (
@@ -40,10 +40,10 @@ const HouseGrowthChart = () => {
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ delay: 0.3 }}
 		>
-			<h2 className='text-xl font-semibold text-gray-100 mb-4'>Houses Growth</h2>
+			<h2 className='text-xl font-semibold text-gray-100 mb-4'>Rooms Growth</h2>
 			<div className='h-[320px]'>
 				<ResponsiveContainer width='100%' height='100%'>
-					<LineChart data={houseGrowthData}>
+					<LineChart data={roomGrowthData}>
 						<CartesianGrid strokeDasharray='3 3' stroke='#374151' />
 						<XAxis dataKey='month' stroke='#9CA3AF' />
 						<YAxis stroke='#9CA3AF' />
@@ -56,7 +56,7 @@ const HouseGrowthChart = () => {
 						/>
 						<Line
 							type='monotone'
-							dataKey='houses'
+							dataKey='rooms'
 							stroke='#8B5CF6'
 							strokeWidth={2}
 							dot={{ fill: "#8B5CF6", strokeWidth: 2, r: 4 }}
@@ -69,4 +69,4 @@ const HouseGrowthChart = () => {
 	);
 };
 
-export default HouseGrowthChart;
+export default RoomsGrowthChart;

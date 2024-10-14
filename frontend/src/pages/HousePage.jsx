@@ -67,7 +67,7 @@ const HousePage = () => {
 					<StatCard
 						name='Active Houses'
 						icon={UserCheck}
-						value={activeHouses.toLocaleString()} // Updated variable
+						value={activeHouses.toLocaleString()} 
 						color='#F59E0B'
 					/>
 					<StatCard

@@ -2,9 +2,9 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import { useContext } from "react";
 
 import Sidebar from "./components/common/Sidebar";
-import TenantSidebar from "./components/common/TenantSidebar"; // Import the tenant sidebar
+import TenantSidebar from "./components/common/TenantSidebar"; 
 import OverviewPage from "./pages/OverviewPage";
-import ProductsPage from "./pages/ProductsPage";
+import VacantPage from "./pages/VacantPage.jsx";
 import UsersPage from "./pages/UsersPage";
 import OrdersPage from "./pages/OrdersPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
@@ -14,8 +14,9 @@ import ViewPage from "./pages/ViewPage";
 import RoleProtectedRoute from "./components/common/RoleProtectedRoute.jsx";
 import Login from "./pages/login";
 import Register from "./pages/register";
-import { AuthContext } from "./context/authContext"; // Import AuthContext to check user role
+import { AuthContext } from "./context/authContext"; 
 import HousePage from "./pages/HousePage.jsx";
+import RoomsPage from "./pages/RoomsPage.jsx";
 
 function App() {
   const location = useLocation();
@@ -48,8 +49,8 @@ function App() {
           path="/"
           element={
             <RoleProtectedRoute
-              element={OverviewPage}
-              ProductsPage="/products"
+              element={AnalyticsPage}
+              VacantPage="/vacants"
               UsersPage="/user"
               OrdersPage="/orders"
               AnalyticsPage="/analytics"
@@ -59,11 +60,11 @@ function App() {
             />
           }
         />
-        <Route path="/products" element={<ProductsPage />} />
+        <Route path="/vacants" element={<VacantPage />} />
         <Route path="/users" element={<UsersPage />} />
         <Route path="/houses" element={<HousePage />} />
+        <Route path="/rooms" element={<RoomsPage />} />
         <Route path="/orders" element={<OrdersPage />} />
-        <Route path="/analytics" element={<AnalyticsPage />} />
         <Route path="/settings" element={<SettingsPage />} />
         <Route path="/tenant" element={<TenantPage />} />
         <Route path="/view" element={<ViewPage />} />

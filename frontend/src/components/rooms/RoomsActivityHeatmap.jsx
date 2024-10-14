@@ -1,10 +1,9 @@
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { motion } from "framer-motion";
 import { useQuery } from '@apollo/client';
-import { GET_HOUSES } from "../../queries/houseQueries";
-
-const HouseActivityHeatmap = () => {
-	const { loading, error, data } = useQuery(GET_HOUSES); 
+import { GET_ROOMS } from "../../queries/roomQueries";
+const RoomsActivityHeatmap = () => {
+	const { loading, error, data } = useQuery(GET_ROOMS); // Fetch rooms data
 
 	// Handle loading state
 	if (loading) return <p>Loading...</p>;
@@ -12,11 +11,11 @@ const HouseActivityHeatmap = () => {
 	// Handle error state
 	if (error) return <p>Error: {error.message}</p>;
 
-	// Extract house data from the query result
-	const houses = data.houses || [];
+	// Extract room data from the query result
+	const rooms = data.rooms || [];
 
-	// Initialize house activity data for the week
-	const houseActivityData = [
+	// Initialize room activity data for the week
+	const roomActivityData = [
 		{ name: "Mon", "0-4": 0, "4-8": 0, "8-12": 0, "12-16": 0, "16-20": 0, "20-24": 0 },
 		{ name: "Tue", "0-4": 0, "4-8": 0, "8-12": 0, "12-16": 0, "16-20": 0, "20-24": 0 },
 		{ name: "Wed", "0-4": 0, "4-8": 0, "8-12": 0, "12-16": 0, "16-20": 0, "20-24": 0 },
@@ -26,9 +25,9 @@ const HouseActivityHeatmap = () => {
 		{ name: "Sun", "0-4": 0, "4-8": 0, "8-12": 0, "12-16": 0, "16-20": 0, "20-24": 0 },
 	];
 
-	// Calculate house activity based on createdAt field
-	houses.forEach(house => {
-		const createdAt = new Date(house.createdAt); // Assuming `createdAt` field exists
+	// Calculate room activity based on createdAt field
+	rooms.forEach(room => {
+		const createdAt = new Date(room.createdAt); // Assuming `createdAt` field exists
 		if (createdAt) {
 			const dayIndex = createdAt.getDay(); // Get day index (0-6)
 			const hour = createdAt.getHours(); // Get hour (0-23)
@@ -43,7 +42,7 @@ const HouseActivityHeatmap = () => {
 			else if (hour >= 20 && hour < 24) hourRange = "20-24";
 
 			if (hourRange) {
-				houseActivityData[dayIndex][hourRange] += 1; // Increment the respective hour range for the day
+				roomActivityData[dayIndex][hourRange] += 1; // Increment the respective hour range for the day
 			}
 		}
 	});
@@ -55,10 +54,10 @@ const HouseActivityHeatmap = () => {
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ delay: 0.4 }}
 		>
-			<h2 className='text-xl font-semibold text-gray-100 mb-4'>Houses Activity Heatmap</h2>
+			<h2 className='text-xl font-semibold text-gray-100 mb-4'>Rooms Activity Heatmap</h2>
 			<div style={{ width: "100%", height: 300 }}>
 				<ResponsiveContainer>
-					<BarChart data={houseActivityData}>
+					<BarChart data={roomActivityData}>
 						<CartesianGrid strokeDasharray='3 3' stroke='#374151' />
 						<XAxis dataKey='name' stroke='#9CA3AF' />
 						<YAxis stroke='#9CA3AF' />
@@ -83,4 +82,4 @@ const HouseActivityHeatmap = () => {
 	);
 };
 
-export default HouseActivityHeatmap;
+export default RoomsActivityHeatmap;

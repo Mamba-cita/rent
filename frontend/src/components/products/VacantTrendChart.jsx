@@ -10,7 +10,7 @@ const salesData = [
 	{ month: "Jun", sales: 5500 },
 ];
 
-const SalesTrendChart = () => {
+const VacantTrendChart = () => {
 	return (
 		<motion.div
 			className='bg-gray-800 bg-opacity-50 backdrop-blur-md shadow-lg rounded-xl p-6 border border-gray-700'
@@ -40,4 +40,4 @@ const SalesTrendChart = () => {
 		</motion.div>
 	);
 };
-export default SalesTrendChart;
+export default VacantTrendChart;

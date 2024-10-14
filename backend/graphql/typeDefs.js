@@ -13,7 +13,6 @@ module.exports = gql`
     }
 
     # Users registration
-
     type User {
         id: ID!
         username: String
@@ -27,21 +26,20 @@ module.exports = gql`
     }
 
     input RegisterInput {
-        username: String
-        email: String
-        tel: String
-        id_no: String
-        password: String
-        confirmPassword: String
+        username: String!
+        email: String!
+        tel: String!
+        id_no: String!
+        password: String!
+        confirmPassword: String!
     }
 
     input LoginInput {
-        email: String
-        password: String
+        email: String!
+        password: String!
     }
 
     # Houses
-
     type House {
         id: ID!
         city: String
@@ -52,18 +50,19 @@ module.exports = gql`
     }
 
     input HouseInput {
-        city: String
-        street: String
-        name: String
+        city: String!
+        street: String!
+        name: String!
     }
 
     # Rooms
-
     type Room {
         id: ID!
-        room_no: String
+        room_no: String!
         size: Int
         status: RoomStatus
+        rent: Float!            # Include rent in the Room type
+        floor: Int              # Include floor in the Room type
         houseId: ID!
         house: House 
         createdAt: String
@@ -73,9 +72,12 @@ module.exports = gql`
     }
 
     input RoomInput {
-        room_no: String
+        room_no: String!
         size: Int
         houseId: ID! 
+        tenantId: ID
+        rent: Float!       
+        floor: Int 
     }
 
     # Enum for Room Status
@@ -85,6 +87,29 @@ module.exports = gql`
         ON_NOTICE
     }
 
+  
+    
+  # Bill Type
+type Bill {
+    id: ID!
+    roomId: String
+    rent: Float!
+    waterBill: Float!
+    garbageCharge: Float!
+    createdAt: String  
+    updatedAt: String  
+}
+
+# Input for Bill
+input BillInput {
+    roomId: String
+    rent: Float!
+    waterBill: Float!
+    garbageCharge: Float!
+}
+
+    
+    # Queries
     type Query {
         message(id: ID!): Message
         user(id: ID!): User
@@ -93,15 +118,18 @@ module.exports = gql`
         house(id: ID!): House          # Get a single house by ID
         rooms: [Room]                  # Get all rooms
         room(id: ID!): Room            # Get a single room by ID
+        bills: [Bill]                  # Get all bills
+        bill(id: ID!): Bill            # Get a single bill by ID
     }
 
+    # Mutations
     type Mutation {
         createMessage(messageInput: MessageInput): Message!
         
-        # Users registration
+        # User registration
         registerUser(registerInput: RegisterInput): User!
         
-        # Users login
+        # User login
         loginUser(loginInput: LoginInput): User!
         
         # Room operations
@@ -112,6 +140,10 @@ module.exports = gql`
         # House operations
         createHouse(houseInput: HouseInput): House!
         updateHouse(id: ID!, houseInput: HouseInput): House! 
-        deleteHouse(id: ID!): House!                    
+        deleteHouse(id: ID!): House!      
+        
+        # Bill operations
+        createBill(billInput: BillInput!): Bill! 
+        updateBill(id: ID!, billInput: BillInput): Bill! 
     }
 `;

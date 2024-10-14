@@ -13,8 +13,8 @@ const SIDEBAR_ITEMS = [
 	{ name: "Dashboard", icon: ShoppingCart, color: "#F59E0B", href: "/orders" },
 	{ name: "Tenants", icon: Users, color: "#EC4899", href: "/users" },
 	{ name: "Houses", icon: DollarSign, color: "#10B981", href: "/houses" },
-	{ name: "Rooms", icon: TrendingUp, color: "#3B82F6", href: "/analytics" },
-	{ name: "vacant", icon: ShoppingBag, color: "#8B5CF6", href: "/products" },
+	{ name: "Rooms", icon: TrendingUp, color: "#3B82F6", href: "/rooms" },
+	{ name: "vacant", icon: ShoppingBag, color: "#8B5CF6", href: "/vacants" },
 	{ name: "Settings", icon: Settings, color: "#6EE7B7", href: "/settings" },
 ];
 
