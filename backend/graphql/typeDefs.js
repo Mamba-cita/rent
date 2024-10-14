@@ -80,6 +80,40 @@ module.exports = gql`
         floor: Int 
     }
 
+       # Other Charges
+       type OtherCharge {
+        name: String!
+        amount: Float!
+    }
+
+    # Input for Other Charges
+    input OtherChargeInput {
+        name: String!
+        amount: Float!
+    }
+
+    # Rent
+    type Rent {
+        id: ID!
+        roomId: ID
+        waterBill: String
+        garbageCharge: String
+        rent: String
+        status: RentStatus
+        otherCharges: [OtherCharge!]! # Array of OtherCharge
+        createdAt: String  
+        updatedAt: String 
+    }
+
+    input RentInput {
+        waterBill: String!
+        garbageCharge: String!
+        rent: String!
+        roomId: ID!
+        otherCharges: [OtherChargeInput!]! # Array of OtherChargeInput
+
+    }
+
     # Enum for Room Status
     enum RoomStatus {
         VACANT
@@ -87,28 +121,16 @@ module.exports = gql`
         ON_NOTICE
     }
 
-  
-    
-  # Bill Type
-type Bill {
-    id: ID!
-    roomId: String
-    rent: Float!
-    waterBill: Float!
-    garbageCharge: Float!
-    createdAt: String  
-    updatedAt: String  
-}
 
-# Input for Bill
-input BillInput {
-    roomId: String
-    rent: Float!
-    waterBill: Float!
-    garbageCharge: Float!
-}
 
-    
+
+    # Enum for Rent Status
+    enum RentStatus {
+        PAID
+        UNPAID
+        ARREARS
+    }
+
     # Queries
     type Query {
         message(id: ID!): Message
@@ -118,8 +140,8 @@ input BillInput {
         house(id: ID!): House          # Get a single house by ID
         rooms: [Room]                  # Get all rooms
         room(id: ID!): Room            # Get a single room by ID
-        bills: [Bill]                  # Get all bills
-        bill(id: ID!): Bill            # Get a single bill by ID
+        rents: [Rent]                  # Get all rents
+        rent(id: ID!): Rent            # Get a single rent by ID
     }
 
     # Mutations
@@ -142,8 +164,9 @@ input BillInput {
         updateHouse(id: ID!, houseInput: HouseInput): House! 
         deleteHouse(id: ID!): House!      
         
-        # Bill operations
-        createBill(billInput: BillInput!): Bill! 
-        updateBill(id: ID!, billInput: BillInput): Bill! 
+        # Rent operations
+        createRent(rentInput: RentInput): Rent!
+        updateRentStatus(id: ID!, status: RentStatus!): Rent!
+        deleteRent(id: ID!): Rent!
     }
 `;
