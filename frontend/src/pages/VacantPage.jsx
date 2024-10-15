@@ -1,9 +1,9 @@
 import { motion } from "framer-motion";
 import Header from "../components/common/Header";
 import { AlertTriangle, DollarSign, Package, TrendingUp } from "lucide-react";
-import CategoryDistributionChart from "../components/overview/CategoryDistributionChart";
-import VacantsTable from "../components/products/VacantsTable";
-import VacantTrendChart from "../components/products/VacantTrendChart";
+import VacantsTable from "../components/vacant/VacantsTable";
+import VacantTrendChart from "../components/vacant/VacantTrendChart";
+import NoticeTrendChart from "../components/vacant/NoticeTrendChart";
 
 const VacantPage = () => {
 	return (
@@ -19,8 +19,8 @@ const VacantPage = () => {
 
 				{/* CHARTS SECTION */}
 				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8 mt-8'>
-					{/* <VacantTrendChart />
-					<CategoryDistributionChart /> */}
+					<VacantTrendChart />
+					<NoticeTrendChart />
 				</div>
 			</main>
 		</div>

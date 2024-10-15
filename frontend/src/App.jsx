@@ -3,10 +3,8 @@ import { useContext } from "react";
 
 import Sidebar from "./components/common/Sidebar";
 import TenantSidebar from "./components/common/TenantSidebar"; 
-import OverviewPage from "./pages/OverviewPage";
 import VacantPage from "./pages/VacantPage.jsx";
 import UsersPage from "./pages/UsersPage";
-import OrdersPage from "./pages/OrdersPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import SettingsPage from "./pages/SettingsPage";
 import TenantPage from "./pages/TenantPage";
@@ -14,28 +12,28 @@ import ViewPage from "./pages/ViewPage";
 import RoleProtectedRoute from "./components/common/RoleProtectedRoute.jsx";
 import Login from "./pages/login";
 import Register from "./pages/register";
+import NotFoundPage from "./pages/NotFoundPage";
 import { AuthContext } from "./context/authContext"; 
 import HousePage from "./pages/HousePage.jsx";
 import RoomsPage from "./pages/RoomsPage.jsx";
+import DashboardPage from "./pages/DashboardPage.jsx";
 
 function App() {
   const location = useLocation();
-  const { user } = useContext(AuthContext); // Get the logged-in user and their role
+  const { user } = useContext(AuthContext);
 
-  // Conditionally set background class based on the route
   const isPublicRoute = location.pathname === "/login" || location.pathname === "/register";
   const backgroundClass = isPublicRoute ? "bg-white" : "bg-gray-900";
 
   return (
     <div className={`flex h-screen text-gray-100 overflow-hidden ${backgroundClass}`}>
-      {/* Conditionally render the appropriate sidebar */}
-      {!isPublicRoute && (
+      {user && !isPublicRoute && (
         <>
           <div className="fixed inset-0 z-0">
             <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 opacity-80" />
             <div className="absolute inset-0 backdrop-blur-sm" />
           </div>
-          {user?.role === "tenant" ? <TenantSidebar /> : <Sidebar />}
+          {user.role === "tenant" ? <TenantSidebar /> : <Sidebar />}
         </>
       )}
 
@@ -50,24 +48,94 @@ function App() {
           element={
             <RoleProtectedRoute
               element={AnalyticsPage}
-              VacantPage="/vacants"
-              UsersPage="/user"
-              OrdersPage="/orders"
-              AnalyticsPage="/analytics"
-              SettingsPage="/settings"
               tenantPage="/tenant"
-              viewPage="/view"
+              userPage="/view"
             />
           }
         />
-        <Route path="/vacants" element={<VacantPage />} />
-        <Route path="/users" element={<UsersPage />} />
-        <Route path="/houses" element={<HousePage />} />
-        <Route path="/rooms" element={<RoomsPage />} />
-        <Route path="/orders" element={<OrdersPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-        <Route path="/tenant" element={<TenantPage />} />
-        <Route path="/view" element={<ViewPage />} />
+        <Route
+          path="/vacants"
+          element={
+            <RoleProtectedRoute
+              element={VacantPage}
+              tenantPage="/tenant"
+              userPage="/view"
+            />
+          }
+        />
+        <Route
+          path="/tenants"
+          element={
+            <RoleProtectedRoute
+              element={UsersPage}
+              tenantPage="/tenant"
+              userPage="/view"
+            />
+          }
+        />
+        <Route
+          path="/houses"
+          element={
+            <RoleProtectedRoute
+              element={HousePage}
+              tenantPage="/tenant"
+              userPage="/view"
+            />
+          }
+        />
+        <Route
+          path="/rooms"
+          element={
+            <RoleProtectedRoute
+              element={RoomsPage}
+              tenantPage="/tenant"
+              userPage="/view"
+            />
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <RoleProtectedRoute
+              element={DashboardPage}
+              tenantPage="/tenant"
+              userPage="/view"
+            />
+          }
+        />
+        <Route
+          path="/settings"
+          element={
+            <RoleProtectedRoute
+              element={SettingsPage}
+              tenantPage="/tenant"
+              userPage="/view"
+            />
+          }
+        />
+        <Route
+          path="/tenant"
+          element={
+            <RoleProtectedRoute
+              element={TenantPage}
+              tenantPage="/tenant"
+              userPage="/view"
+            />
+          }
+        />
+        <Route
+          path="/view"
+          element={
+            <RoleProtectedRoute
+              element={ViewPage}
+              tenantPage="/tenant"
+              userPage="/view"
+            />
+          }
+        />
+
+        {/* Catch-all route for undefined routes */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </div>
   );

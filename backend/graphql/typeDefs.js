@@ -80,8 +80,8 @@ module.exports = gql`
         floor: Int 
     }
 
-       # Other Charges
-       type OtherCharge {
+    # Other Charges
+    type OtherCharge {
         name: String!
         amount: Float!
     }
@@ -111,18 +111,14 @@ module.exports = gql`
         rent: String!
         roomId: ID!
         otherCharges: [OtherChargeInput!]! # Array of OtherChargeInput
-
     }
 
     # Enum for Room Status
     enum RoomStatus {
         VACANT
         RENTED
-        ON_NOTICE
+        ON_NOTICE  # Only these statuses are retained
     }
-
-
-
 
     # Enum for Rent Status
     enum RentStatus {

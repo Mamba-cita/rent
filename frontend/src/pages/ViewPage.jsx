@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 
 import Header from "../components/common/Header";
 import StatCard from "../components/common/StatCard";
-import SalesOverviewChart from "../components/overview/SalesOverviewChart";
-import CategoryDistributionChart from "../components/overview/CategoryDistributionChart";
-import SalesChannelChart from "../components/overview/SalesChannelChart";
+// import SalesOverviewChart from "../components/overview/SalesOverviewChart";
+// import CategoryDistributionChart from "../components/overview/CategoryDistributionChart";
+// import SalesChannelChart from "../components/overview/SalesChannelChart";
 
 const ViewPage = () => {
 	return (
@@ -29,9 +29,9 @@ const ViewPage = () => {
 				{/* CHARTS */}
 
 				<div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
-					<SalesOverviewChart />
+					{/* <SalesOverviewChart />
 					<CategoryDistributionChart />
-					<SalesChannelChart />
+					<SalesChannelChart /> */}
 				</div>
 			</main>
 		</div>

@@ -3,36 +3,36 @@ const { model, Schema } = require('mongoose');
 const roomSchema = new Schema({
   room_no: {
     type: String,
-    required: true, // Adding a validation to ensure room number is provided
+    required: true, 
   },
   size: {
     type: Number,
-    required: true, // Make sure room size is provided
+    required: true, 
   },
   rent: {
     type: Number,
-    required: true, // Make sure rent is provided
+    required: true, 
   },
   floor: {
     type: Number,
-    required: true, // Make sure floor number is provided
+    required: true, 
   },
   status: {
     type: String,
-    enum: ['VACANT', 'OCCUPIED', 'ON-NOTICE'], // Room status options
+    enum: ['VACANT', 'RENTED', 'ON_NOTICE'], // Room status options
     default: 'VACANT', // Set default status
   },
   houseId: {
     type: Schema.Types.ObjectId,
-    ref: 'House', // Reference to the House model
+    ref: 'House', 
     required: true,
   },
   tenantId: {
     type: Schema.Types.ObjectId,
-    ref: 'User', // Reference to the User model
+    ref: 'User', 
   }
 }, {
-  timestamps: true, // Automatically manage `createdAt` and `updatedAt`
+  timestamps: true, 
 });
 
 // Virtual field to populate `house`

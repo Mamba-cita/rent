@@ -18,7 +18,7 @@ const VacantTrendChart = () => {
 			animate={{ opacity: 1, y: 0 }}
 			transition={{ delay: 0.3 }}
 		>
-			<h2 className='text-xl font-semibold text-gray-100 mb-4'>Sales Trend</h2>
+			<h2 className='text-xl font-semibold text-gray-100 mb-4'>Vacancy Trend</h2>
 			<div style={{ width: "100%", height: 300 }}>
 				<ResponsiveContainer>
 					<LineChart data={salesData}>

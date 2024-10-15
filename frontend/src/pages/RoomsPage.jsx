@@ -10,7 +10,7 @@ import RoomsActivityHeatmap from "../components/rooms/RoomsActivityHeatmap";
 import RoomsDemographicsChart from "../components/rooms/RoomsDemographicsChart";
 
 const RoomsPage = () => {
-	const { loading, error, data } = useQuery(GET_ROOMS); // Fetch rooms data
+	const { loading, error, data } = useQuery(GET_ROOMS);
 
 	// Handle loading state
 	if (loading) return <p>Loading...</p>;
@@ -36,7 +36,7 @@ const RoomsPage = () => {
 	}).length;
 
 	// Filter for active rooms (adjust as needed based on your use case for "active")
-	const activeRooms = rooms.filter(room => room.status === 'OCCUPIED').length;
+	const activeRooms = rooms.filter(room => room.status === 'RENTED').length;
 
 	// Calculate churn rate based on active rooms
 	const churnRate = totalRooms > 0 ? 

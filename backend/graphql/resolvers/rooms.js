@@ -29,8 +29,10 @@ module.exports = {
       
       try {
         // Default status set to 'VACANT' if no tenant is assigned
-        const status = tenantId ? 'OCCUPIED' : 'VACANT';
+        const status = tenantId ? 'RENTED' : 'VACANT';
 
+        // Optionally, you could validate houseId and tenantId here if needed
+        
         const newRoom = new Room({
           room_no,
           size,
@@ -42,19 +44,24 @@ module.exports = {
         });
 
         const savedRoom = await newRoom.save();
-        return savedRoom;
+        return savedRoom.populate('house'); // Populate house after save for consistency
       } catch (error) {
         throw new ApolloError("Error creating room: " + error.message);
       }
     },
 
     async updateRoomStatus(_, { id, status }) {
+      // Ensure the status is one of the valid values
+      if (!['VACANT', 'RENTED', 'ON_NOTICE'].includes(status)) {
+        throw new ApolloError("Invalid status value", "INVALID_STATUS");
+      }
+
       try {
         const updatedRoom = await Room.findByIdAndUpdate(
           id,
           { status },
           { new: true }
-        );
+        ).populate('house'); // Populate for consistency
         if (!updatedRoom) {
           throw new ApolloError("Room not found", "ROOM_NOT_FOUND");
         }
@@ -66,11 +73,11 @@ module.exports = {
 
     async deleteRoom(_, { id }) {
       try {
-        const deletedRoom = await Room.findByIdAndDelete(id);
+        const deletedRoom = await Room.findByIdAndDelete(id).populate('house'); // Populate for consistency
         if (!deletedRoom) {
           throw new ApolloError("Room not found", "ROOM_NOT_FOUND");
         }
-        return { id: deletedRoom.id, message: "Room deleted successfully." };
+        return { id: deletedRoom.id, message: "Room deleted successfully.", room: deletedRoom }; // Return deleted room object
       } catch (error) {
         throw new ApolloError("Error deleting room: " + error.message);
       }
