@@ -5,12 +5,14 @@ A housing management system built with React and GraphQL, allowing users to mana
 
 <h1 align="center">Rent Dashboard</h1>
 
-<!-- ![Demo App](/frontend/public/Screenshot 2024-10-15 at 11.23.26.png)
-![Demo App](frontend/public/Screenshot 2024-10-15 at 11.23.40.png)
-![Demo App](frontend/public/Screenshot 2024-10-15 at 11.23.55.png)
-![Demo App](frontend/public/Screenshot 2024-10-15 at 11.24.12.png)
-![Demo App](frontend/public/Screenshot 2024-10-15 at 11.24.24.png)
-![Demo App](frontend/public/Screenshot 2024-10-15 at 11.24.36.png) -->
+[Demo App](main/frontend/public/Screenshot%202024-10-15%20at%2011.23.26.png)
+![Demo App](main/frontend/public/Screenshot%202024-10-15%20at%2011.23.40.png)
+![Demo App](main/frontend/public/Screenshot%202024-10-15%20at%2011.23.55.png)
+![Demo App](main/frontend/public/Screenshot%202024-10-15%20at%2011.24.12.png)
+![Demo App](main/frontend/public/Screenshot%202024-10-15%20at%2011.24.24.png)
+![Demo App](main/frontend/public/Screenshot%202024-10-15%20at%2011.24.36.png)
+
+
 
 ## Table of Contents
 - [Housing Management System](#housing-management-system)
