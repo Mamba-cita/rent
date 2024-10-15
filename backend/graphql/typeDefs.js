@@ -127,6 +127,15 @@ module.exports = gql`
         ARREARS
     }
 
+    type TotalCharges {
+        totalWaterBills: Float
+        totalGarbageCharge: Float
+        totalOtherCharges: Float
+        totalPaid: Int
+        totalUnpaid: Int
+        totalArrears: Int
+      }
+
     # Queries
     type Query {
         message(id: ID!): Message
@@ -138,6 +147,7 @@ module.exports = gql`
         room(id: ID!): Room            # Get a single room by ID
         rents: [Rent]                  # Get all rents
         rent(id: ID!): Rent            # Get a single rent by ID
+        getTotalCharges: TotalCharges
     }
 
     # Mutations

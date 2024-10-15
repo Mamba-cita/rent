@@ -5,22 +5,22 @@ const INSIGHTS = [
 	{
 		icon: TrendingUp,
 		color: "text-green-500",
-		insight: "Revenue is up 15% compared to last month, driven primarily by a successful email campaign.",
+		insight: "Rental income has increased by 12% over the last month, driven by higher occupancy rates.",
 	},
 	{
 		icon: Users,
 		color: "text-blue-500",
-		insight: "Customer retention has improved by 8% following the launch of the new loyalty program.",
+		insight: "Tenant satisfaction ratings have improved by 10% after implementing new maintenance response policies.",
 	},
 	{
 		icon: ShoppingBag,
 		color: "text-purple-500",
-		insight: 'Product category "Electronics" shows the highest growth potential based on recent market trends.',
+		insight: 'Short-term rental units show the highest demand during holidays, indicating a need for targeted marketing.',
 	},
 	{
 		icon: DollarSign,
 		color: "text-yellow-500",
-		insight: "Optimizing pricing strategy could potentially increase overall profit margins by 5-7%.",
+		insight: "Adjusting rental prices based on market trends could boost revenue by up to 6% this quarter.",
 	},
 ];
 
@@ -46,4 +46,5 @@ const AIPoweredInsights = () => {
 		</motion.div>
 	);
 };
+
 export default AIPoweredInsights;

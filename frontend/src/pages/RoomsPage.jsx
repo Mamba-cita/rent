@@ -1,4 +1,4 @@
-import { UserCheck, UserPlus, UsersIcon, UserX } from "lucide-react";
+import { House, UserCheck, UserPlus, UsersIcon, UserX } from "lucide-react";
 import { motion } from "framer-motion";
 import { useQuery } from '@apollo/client';
 import Header from "../components/common/Header";
@@ -57,19 +57,19 @@ const RoomsPage = () => {
 				>
 					<StatCard
 						name='Total Rooms'
-						icon={UsersIcon}
+						icon={House}
 						value={totalRooms.toLocaleString()}
 						color='#6366F1'
 					/>
 					<StatCard
 						name='New Rooms Today'
-						icon={UserPlus}
+						icon={House}
 						value={newRoomsToday}
 						color='#10B981'
 					/>
 					<StatCard
 						name='Occupied Rooms'
-						icon={UserCheck}
+						icon={House}
 						value={activeRooms.toLocaleString()} 
 						color='#F59E0B'
 					/>
