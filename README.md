@@ -3,6 +3,15 @@
 
 A housing management system built with React and GraphQL, allowing users to manage properties, tenants, and rent tracking efficiently.
 
+<h1 align="center">Rent Dashboard</h1>
+
+<!-- ![Demo App](/frontend/public/Screenshot 2024-10-15 at 11.23.26.png)
+![Demo App](frontend/public/Screenshot 2024-10-15 at 11.23.40.png)
+![Demo App](frontend/public/Screenshot 2024-10-15 at 11.23.55.png)
+![Demo App](frontend/public/Screenshot 2024-10-15 at 11.24.12.png)
+![Demo App](frontend/public/Screenshot 2024-10-15 at 11.24.24.png)
+![Demo App](frontend/public/Screenshot 2024-10-15 at 11.24.36.png) -->
+
 ## Table of Contents
 - [Housing Management System](#housing-management-system)
   - [Table of Contents](#table-of-contents)
@@ -19,7 +28,6 @@ A housing management system built with React and GraphQL, allowing users to mana
     - [Example of Room Input](#example-of-room-input)
   - [Contributing](#contributing)
   - [License](#license)
-    - [Notes](#notes)
 
 ## Features
 - User registration and login.
@@ -101,7 +109,6 @@ The application uses React Router for navigation, with role-based protected rout
 The GraphQL schema is defined as follows:
 
 ```graphql
-# Define your GraphQL types, queries, and mutations here
 ```
 
 ### Example of Room Input
@@ -136,8 +143,3 @@ Contributions are welcome! Please fork the repository and submit a pull request 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 ```
-
-### Notes
-- Replace placeholder values (like repository links) with your actual details.
-- Update the GraphQL schema section with the full schema or relevant snippets as needed.
-- Ensure the usage section accurately reflects how to interact with your application and API.
