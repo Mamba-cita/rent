@@ -20,13 +20,10 @@ export default function Login() {
   const navigate = useNavigate();
   const [errors, setErrors] = useState([]);
 
-  // Callback function to handle the login action
   function loginUserCallback() {
-    console.log("Callback Hit");
     loginUser();
   }
 
-  // Form handling
   const { onChange, onSubmit, values } = useForm(loginUserCallback, {
     email: "",
     password: "",
@@ -34,7 +31,6 @@ export default function Login() {
 
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     update(_, { data: { loginUser: userData } }) {
-      // Store user data in context, including username
       context.login({
         username: userData.username,
         email: userData.email,
@@ -42,21 +38,18 @@ export default function Login() {
         token: userData.token,
       });
 
-      const userRole = userData.role;
-
-      // Navigate based on the user role
-      switch (userRole) {
+      switch (userData.role) {
         case "Admin":
-          navigate("/"); // Redirect Admins to Home
+          navigate("/");
           break;
         case "Tenant":
-          navigate("/tenant"); // Redirect Tenants to TenantPage
+          navigate("/tenant");
           break;
         case "User":
-          navigate("/user"); // Redirect Users to UserPage
+          navigate("/user");
           break;
         default:
-          navigate("/"); // Fallback to Home if no role match is found
+          navigate("/");
           break;
       }
     },
@@ -67,44 +60,79 @@ export default function Login() {
   });
 
   return (
-    <Container spacing={2} maxWidth="sm">
-      <h3>Login</h3>
-      <p>This is login test</p>
-
-      <Stack spacing={2} padding={2}>
-        <TextField
-          label="Email"
-          variant="outlined"
-          name="email"
-          onChange={onChange}
-          fullWidth
-        />
-        <TextField
-          label="Password"
-          variant="outlined"
-          name="password"
-          type="password"
-          onChange={onChange}
-          fullWidth
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={onSubmit}
-          disabled={loading}
+    <Container maxWidth="sm">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Box
+          width="100%"
+          sx={{
+            backgroundColor: "#ffffff", // Change to white background for consistency
+            borderRadius: "10px",
+            padding: "40px", // Match Register component padding
+            boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.1)", // Match Register component shadow
+            border: "1px solid #ddd",
+          }}
         >
-          {loading ? "Loading..." : "Login"}
-        </Button>
-        {errors.length > 0 && (
-          <Alert severity="error">
-            <ul>
-              {errors.map((error) => (
-                <li key={error.message}>{error.message}</li>
-              ))}
-            </ul>
-          </Alert>
-        )}
-      </Stack>
+          {/* Title */}
+          <Typography
+            variant="h4"
+            align="center"
+            gutterBottom
+            sx={{ fontWeight: "bold", color: "#333" }} // Style for title
+          >
+            Login
+          </Typography>
+          <Typography
+            variant="body1"
+            align="center"
+            gutterBottom
+            sx={{ color: "#666" }} // Description style
+          >
+            Please enter your credentials to access your account.
+          </Typography>
+
+          {/* Form Fields */}
+          <Stack spacing={3}>
+            <TextField
+              label="Email"
+              variant="outlined"
+              name="email"
+              onChange={onChange}
+              fullWidth
+            />
+            <TextField
+              label="Password"
+              variant="outlined"
+              name="password"
+              type="password"
+              onChange={onChange}
+              fullWidth
+            />
+            {errors.length > 0 && (
+              <Alert severity="error">
+                <ul>
+                  {errors.map((error) => (
+                    <li key={error.message}>{error.message}</li>
+                  ))}
+                </ul>
+              </Alert>
+            )}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onSubmit}
+              disabled={loading}
+              fullWidth
+            >
+              {loading ? "Loading..." : "Login"}
+            </Button>
+          </Stack>
+        </Box>
+      </Box>
     </Container>
   );
 }
