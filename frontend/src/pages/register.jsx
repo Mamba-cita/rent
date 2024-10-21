@@ -21,7 +21,6 @@ export default function Register() {
   const [errors, setErrors] = useState([]);
 
   function registerUserCallback() {
-    console.log("Callback Hit");
     registerUser();
   }
 
@@ -36,22 +35,20 @@ export default function Register() {
 
   const [registerUser, { loading }] = useMutation(REGISTER_USER, {
     update(_, { data: { registerUser: userData } }) {
-      context.login(userData); // Store user data in context
-      const userRole = userData.role;
+      context.login(userData);
 
-      // Navigate based on the user role
-      switch (userRole) {
+      switch (userData.role) {
         case "Admin":
-          navigate("/"); // Redirect Admins to Home
+          navigate("/");
           break;
         case "Tenant":
-          navigate("/tenant"); // Redirect Tenants to TenantPage
+          navigate("/tenant");
           break;
         case "User":
-          navigate("/user"); // Redirect Users to UserPage
+          navigate("/user");
           break;
         default:
-          navigate("/"); // Fallback to Home if no role match is found
+          navigate("/");
           break;
       }
     },
@@ -62,68 +59,107 @@ export default function Register() {
   });
 
   return (
-    <Container spacing={2} maxWidth="sm">
-      <h3>Register</h3>
-      <p>This is register test</p>
-
-      <Stack spacing={2} padding={2}>
-        <TextField
-          label="Username"
-          variant="outlined"
-          name="username"
-          onChange={onChange}
-          fullWidth
-        />
-        <TextField
-          label="Email"
-          variant="outlined"
-          name="email"
-          onChange={onChange}
-          fullWidth
-        />
-        <TextField
-          label="Tel"
-          variant="outlined"
-          name="tel"
-          onChange={onChange}
-          fullWidth
-        />
-        <TextField
-          label="ID Number"
-          variant="outlined"
-          name="id_no"
-          onChange={onChange}
-          fullWidth
-        />
-        <TextField
-          label="Password"
-          variant="outlined"
-          name="password"
-          onChange={onChange}
-          fullWidth
-        />
-        <TextField
-          label="Confirm Password"
-          variant="outlined"
-          name="confirmPassword"
-          onChange={onChange}
-          fullWidth
-        />
-      </Stack>
-      {errors.map((error) => (
-        <Alert severity="error" key={error.message}>
-          {error.message}
-        </Alert>
-      ))}
-      <Box padding={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={onSubmit}
-          disabled={loading}
+    <Container maxWidth="sm">
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        minHeight="100vh"
+      >
+        <Box
+          width="100%"
+          sx={{
+            backgroundColor: "#ffffff",
+            borderRadius: "10px",
+            padding: "40px",
+            boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.1)",
+            border: "1px solid #ddd",
+          }}
         >
-          Register
-        </Button>
+          {/* Title and description */}
+          <Typography
+            variant="h4"
+            align="center"
+            gutterBottom
+            sx={{ fontWeight: "bold", color: "#333" }}
+          >
+            Register To HAO
+          </Typography>
+          <Typography
+            variant="body1"
+            align="center"
+            gutterBottom
+            sx={{ color: "#666" }}
+          >
+            HAO is a comprehensive house management system designed to simplify property managements.
+          </Typography>
+
+          {/* Form Fields */}
+          <Stack spacing={3}>
+            <TextField
+              label="Username"
+              variant="outlined"
+              name="username"
+              onChange={onChange}
+              fullWidth
+            />
+            <TextField
+              label="Email"
+              variant="outlined"
+              name="email"
+              onChange={onChange}
+              fullWidth
+            />
+            <TextField
+              label="Tel"
+              variant="outlined"
+              name="tel"
+              onChange={onChange}
+              fullWidth
+            />
+            <TextField
+              label="ID Number"
+              variant="outlined"
+              name="id_no"
+              onChange={onChange}
+              fullWidth
+            />
+            <TextField
+              label="Password"
+              variant="outlined"
+              name="password"
+              type="password"
+              onChange={onChange}
+              fullWidth
+            />
+            <TextField
+              label="Confirm Password"
+              variant="outlined"
+              name="confirmPassword"
+              type="password"
+              onChange={onChange}
+              fullWidth
+            />
+            {errors.length > 0 && (
+              <Alert severity="error">
+                <ul>
+                  {errors.map((error) => (
+                    <li key={error.message}>{error.message}</li>
+                  ))}
+                </ul>
+              </Alert>
+            )}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onSubmit}
+              disabled={loading}
+              fullWidth
+            >
+              {loading ? "Registering..." : "Register"}
+            </Button>
+          </Stack>
+        </Box>
       </Box>
     </Container>
   );
